@@ -7,19 +7,20 @@ Installation / Usage:
 --
 Prep: make sure you have AWS CLI installed. In the future we'll add CF template to simplify the process.
 It is possible to use AWS Lambda web console without the CLI. It is not documented here, but you can follow the utils/install script...
-1. Create an IAM role for the Lambda script. This role should be able to query the instances and stop/start them. See 'IAM Policy' section for recommended IAM execution and trust policies
-1. Clone this repo into your local workstation.
-1. Edit the calendars.cfg file. Add your organization calendars (see 'Schedule format' section)
-1. Add execution permissions for all scripts in utils folder.
+
+* Create an IAM role for the Lambda script. This role should be able to query the instances and stop/start them. See 'IAM Policy' section for recommended IAM execution and trust policies
+* Clone this repo into your local workstation.
+* Edit the calendars.cfg file. Add your organization calendars (see 'Schedule format' section)
+* Add execution permissions for all scripts in utils folder.
 ```bash
 chmod +x utils/*
 ```
-1. Run the install script, you'll need to provide the ARN of role you have created:
+* Run the install script, you'll need to provide the ARN of role you have created:
 ```bash
 utils/install <ARN of my newly created role>
 ```
-1. If you got the error "A client error (InvalidParameterValueException) occurred when calling the CreateFunction operation: The role defined for the function cannot be assumed by Lambda." make sure you have added the *trust relationship* as defined in the IAM section.
-1. Verify that the script is correctly deployed to Lambda by running utils/run or manually invoking it from Lambda web console.
+* If you got the error "A client error (InvalidParameterValueException) occurred when calling the CreateFunction operation: The role defined for the function cannot be assumed by Lambda." make sure you have added the *trust relationship* as defined in the IAM section.
+* Verify that the script is correctly deployed to Lambda by running utils/run or manually invoking it from Lambda web console.
 You should get result like:
 ```javascript
 {
@@ -28,11 +29,11 @@ You should get result like:
   "parker-controlled": 0
 }
 ```
-1. Now is the fun time. Add the tag 'instance-parker' to all your EC2 instances you wish to schedule. The value should be the name of the schedule.
+* Now is the fun time. Add the tag 'instance-parker' to all your EC2 instances you wish to schedule. The value should be the name of the schedule.
 (Example: "instance-parker":"weekdays") run the Lambda function again, and test that the instances are started or stopped according to your chosen schedules.
-1. After validated, it is time to schedule your lambda function to run periodically. The easiest way to do so is via the Lambda Web console, by adding event source and choosing CloudWatch Events - Schedule.
+* After validated, it is time to schedule your lambda function to run periodically. The easiest way to do so is via the Lambda Web console, by adding event source and choosing CloudWatch Events - Schedule.
 The minimal interval is 5 minutes, which should be sufficient for this kind of task.
-1. Enjoy saving resources and money. You just made the world a greener place :) 
+* Enjoy saving resources and money. You just made the world a greener place :) 
 
 IAM Policies:
 --
@@ -92,7 +93,7 @@ DAY = HH:MM-HH:MM (ex. TUE = 08:00-20:00)
 
 * For now, the timezone is UTC. So a schedule like Saturday between 7AM to 8PM PST (UTC+8) would be written as SAT-15:00-24:00,SUN-00:00-04:00
 (converted into UTC and split into 2 days)
-Some builtin schedules are provided. You can review / edit / delete them
+* Some builtin schedules are provided. You can review / edit / delete them
 
 TODOs and future directions:
 --
