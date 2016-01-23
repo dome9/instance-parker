@@ -1,0 +1,9 @@
+#!/bin/bash
+
+# Update an existing lambda function
+
+PROJ_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )/.." && pwd )"
+mkdir -p $PROJ_DIR/tmp
+UPLOAD=$PROJ_DIR/tmp/instance-parker.zip
+zip -r -X $UPLOAD *.py *.cfg
+aws lambda update-function-code  --function-name instance-parker --zip-file fileb://$UPLOAD

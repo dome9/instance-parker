@@ -1,0 +1,14 @@
+#!/bin/bash
+
+# Upload and define the Lambda script
+
+if [ $# -lt 1 ]; then
+    echo "Syntax: install <ROLE ARN>"
+    exit 1
+fi
+
+PROJ_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )/.." && pwd )"
+mkdir -p $PROJ_DIR/tmp
+UPLOAD=$PROJ_DIR/tmp/instance-parker.zip
+zip -r -X $UPLOAD *.py calendars.cfg
+aws lambda create-function --function-name instance-parker --runtime python2.7 --role $1 --handler instance-parker.lambda_handler --zip-file fileb://$UPLOAD --timeout 60 --description "a scheduled script to start/stop instances according to schedule."
