@@ -1,16 +1,49 @@
-# AWS Instance Parker (by Dome9)
+```
+                                                                                                                                                                
+88                                                                                       88888888ba                           88                                
+88                            ,d                                                         88      "8b                          88                                
+88                            88                                                         88      ,8P                          88                                
+88  8b,dPPYba,   ,adPPYba,  MM88MMM  ,adPPYYba,  8b,dPPYba,    ,adPPYba,   ,adPPYba,     88aaaaaa8P'  ,adPPYYba,  8b,dPPYba,  88   ,d8   ,adPPYba,  8b,dPPYba,  
+88  88P'   `"8a  I8[    ""    88     ""     `Y8  88P'   `"8a  a8"     ""  a8P_____88     88""""""'    ""     `Y8  88P'   "Y8  88 ,a8"   a8P_____88  88P'   "Y8  
+88  88       88   `"Y8ba,     88     ,adPPPPP88  88       88  8b          8PP"""""""     88           ,adPPPPP88  88          8888[     8PP"""""""  88          
+88  88       88  aa    ]8I    88,    88,    ,88  88       88  "8a,   ,aa  "8b,   ,aa     88           88,    ,88  88          88`"Yba,  "8b,   ,aa  88          
+88  88       88  `"YbbdP"'    "Y888  `"8bbdP"Y8  88       88   `"Ybbd8"'   `"Ybbd8"'     88           `"8bbdP"Y8  88          88   `Y8a  `"Ybbd8"'  88          
+                                                                                                                                                                
+                                                                                                                                                                
+```
+# AWS Instance Parker By Dome9
 
 A scheduled Lambda script that automatically stops and starts AWS instances according to predefined schedules.
 This could yield a significant saving in your EC2 spent.
 
-Installation / Usage:
+Installation / Usage
 --
-Prep: make sure you have AWS CLI installed. In the future we'll add CF template to simplify the process.
+* (Recomemnded) Make sure you have the AWS CLI installed. In the future we might replace this with CF template to simplify the process.
 It is possible to use AWS Lambda web console without the CLI. It is not documented here, but you can follow the utils/install script...
-
-* Create an IAM role for the Lambda script. This role should be able to query the instances and stop/start them. See 'IAM Policy' section for recommended IAM execution and trust policies
+* Make sure that you (more correctly, your IAM user- the one that is assinged to the CLI / AWS console) have enough permissions to create lambda functions. The needed permissions are:
+```
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "myLambdaAdminPermisisons",
+            "Effect": "Allow",
+            "Action": [
+                "lambda:*",
+                "iam:PassRole"
+            ],
+            "Resource": [
+                "*"
+            ]
+        }
+    ]
+}
+```
+* Make sure that your AWS CLI is configured to the relevant region that you wish to run the Lambda. FYI the AWS Lambda service is operational in these regions: http://docs.aws.amazon.com/general/latest/gr/rande.html#lambda_region.
+***Note: the script will still connect to all regions in your account, so there is no need to deploy the same script on multiple regions.***
 * Clone this repo into your local workstation.
-* Edit the calendars.cfg file. Add your organization calendars (see 'Schedule format' section)
+* Edit the calendars.cfg file. Add your organization's calendars (see 'Schedule format' section)
+* Create an IAM role for the Lambda script. This role should be able to query the instances and stop/start them. See 'IAM Policy' section for detailed IAM execution and trust policies
 * Add execution permissions for all scripts in utils folder.
 ```bash
 chmod +x utils/*
@@ -23,15 +56,16 @@ utils/install <ARN of my newly created role>
 * Verify that the script is correctly deployed to Lambda by running utils/run or manually invoking it from Lambda web console.
 You should get result like:
 ```javascript
-{
+[{
   "started": 0,
   "stopped": 0,
-  "parker-controlled": 0
-}
+  "parker-controlled": 0,
+  "region":"XYZ"
+}...]
 ```
-* Now is the fun time. Add the tag 'instance-parker' to all your EC2 instances you wish to schedule. The value should be the name of the schedule.
+* Now is the fun time. Add the tag 'instance-parker' to all your EC2 instances you wish to schedule. The value should match the name of one of your schedules.
 (Example: "instance-parker":"weekdays") run the Lambda function again, and test that the instances are started or stopped according to your chosen schedules.
-* After validated, it is time to schedule your lambda function to run periodically. The easiest way to do so is via the Lambda Web console, by adding event source and choosing CloudWatch Events - Schedule.
+* After validated, it is time to schedule your lambda function to run periodically. The easiest (and only) way to do so is via the Lambda Web console, by adding event source and choosing CloudWatch Events - Schedule.
 The minimal interval is 5 minutes, which should be sufficient for this kind of task.
 * Enjoy saving resources and money. You just made the world a greener place :) 
 
@@ -91,17 +125,27 @@ Schedules format:
 [calendar_name]
 DAY = HH:MM-HH:MM (ex. TUE = 08:00-20:00)
 
-* For now, the timezone is UTC. So a schedule like Saturday between 7AM to 8PM PST (UTC+8) would be written as SAT-15:00-24:00,SUN-00:00-04:00
+* Timezone of these schedules is in ***UTC***. A schedule like Saturday between 7AM to 8PM PST (UTC+8) would be written as:
+```
+[mycal]
+SAT = 15:00-24:00
+SUN = 00:00-04:00
+```
 (converted into UTC and split into 2 days)
+* It is possible to have multiple time slots for a single day. For that just use comma (without spaces). Ex:
+```
+[test]
+TUE = 06:00-07:00,20:00-21:00
+```
 * Some builtin schedules are provided. You can review / edit / delete them
 
 TODOs and future directions:
 --
 * Adding multiple schedules per a single instance - allowing a composition of schedules
-* Supporting custom schedules that are defined ad-hok at the instance (tag) level (rather at a global location)
+* Supporting ad-hock schedules that are defined the instance (tag) level (rather at a global location)
 * Adding more complex schedules schemes (like cron format)
 * Moving the schedules into a seperate location (S3?) allowing to add / modify global scedules without modifying/ redeploying the Lambda code
 * Adding CloudFormation to ease deployment of the script.
-* Better error handling when schedule name does not match, schedule syntaxt error...
-* Think about concept of dry-run and how to test schedules.
+* Better error handling when schedule name do not match, schedule syntaxt error...
+* Add multiple regions support
 
