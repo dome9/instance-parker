@@ -6,8 +6,8 @@
 ```
 # AWS Instance Parker By Dome9
 
-A scheduled Lambda script that automatically stops and starts AWS instances according to predefined schedules.
-This could yield a significant saving in your EC2 spent.
+A scheduled AWS Lambda script that automatically stops and starts AWS instances according to predefined schedules.
+This could reduce your AWS EC2 spend by 10%-30%%.
 
 Installation / Usage
 --
