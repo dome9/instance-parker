@@ -1,15 +1,8 @@
 ```
-                                                                                                                                                                
-88                                                                                       88888888ba                           88                                
-88                            ,d                                                         88      "8b                          88                                
-88                            88                                                         88      ,8P                          88                                
-88  8b,dPPYba,   ,adPPYba,  MM88MMM  ,adPPYYba,  8b,dPPYba,    ,adPPYba,   ,adPPYba,     88aaaaaa8P'  ,adPPYYba,  8b,dPPYba,  88   ,d8   ,adPPYba,  8b,dPPYba,  
-88  88P'   `"8a  I8[    ""    88     ""     `Y8  88P'   `"8a  a8"     ""  a8P_____88     88""""""'    ""     `Y8  88P'   "Y8  88 ,a8"   a8P_____88  88P'   "Y8  
-88  88       88   `"Y8ba,     88     ,adPPPPP88  88       88  8b          8PP"""""""     88           ,adPPPPP88  88          8888[     8PP"""""""  88          
-88  88       88  aa    ]8I    88,    88,    ,88  88       88  "8a,   ,aa  "8b,   ,aa     88           88,    ,88  88          88`"Yba,  "8b,   ,aa  88          
-88  88       88  `"YbbdP"'    "Y888  `"8bbdP"Y8  88       88   `"Ybbd8"'   `"Ybbd8"'     88           `"8bbdP"Y8  88          88   `Y8a  `"Ybbd8"'  88          
-                                                                                                                                                                
-                                                                                                                                                                
+|          |                            ,---.          |              
+|,---.,---.|--- ,---.,---.,---.,---.    |---',---.,---.|__/ ,---.,---.
+||   |`---.|    ,---||   ||    |---'    |    ,---||    |  \ |---'|    
+``   '`---'`---'`---^`   '`---'`---'    `    `---^`    `   ``---'`    
 ```
 # AWS Instance Parker By Dome9
 
@@ -147,5 +140,4 @@ TODOs and future directions:
 * Moving the schedules into a seperate location (S3?) allowing to add / modify global scedules without modifying/ redeploying the Lambda code
 * Adding CloudFormation to ease deployment of the script.
 * Better error handling when schedule name do not match, schedule syntaxt error...
-* Add multiple regions support
 
