@@ -5,12 +5,23 @@
 ``   '`---'`---'`---^`   '`---'`---'    `    `---^`    `   ``---'`    
 ```
 # AWS Instance Parker By Dome9
+*What*
 
 A scheduled AWS Lambda script that automatically stops and starts AWS instances according to predefined schedules.
-This could reduce your AWS EC2 spend by 10%-30%%.
 
-Installation / Usage
---
+*Why*
+
+Dev / Test environments are mostly operated only during working hours, so there is a large cost saving opportunity for turning stopping them at nights / weekends (could reduce 20%-30% from your EC2 spend)
+
+*How*
+
+* You define your own schedules
+* You tag your instances with a special tag matching your schedules
+* A Lambda script periodically checks your environment, starting and stopping instances according to your schedules definitions
+
+
+
+# Installation / Usage
 * (Recomemnded) Make sure you have the AWS CLI installed. In the future we might replace this with CF template to simplify the process.
 It is possible to use AWS Lambda web console without the CLI. It is not documented here, but you can follow the utils/install script...
 * Make sure that you (more correctly, your IAM user- the one that is assinged to the CLI / AWS console) have enough permissions to create lambda functions. The needed permissions are:
@@ -50,8 +61,8 @@ utils/install <ARN of my newly created role>
 You should get result like:
 ```javascript
 [{
-  "started": 0,
-  "stopped": 0,
+  "starting": 0,
+  "stopping": 0,
   "parker-controlled": 0,
   "region":"XYZ"
 }...]
@@ -133,8 +144,7 @@ TUE = 06:00-07:00,20:00-21:00
 ```
 * Some builtin schedules are provided. You can review / edit / delete them
 
-TODOs and future directions:
---
+# TODOs and future directions:
 * Adding multiple schedules per a single instance - allowing a composition of schedules
 * Supporting ad-hock schedules that are defined the instance (tag) level (rather at a global location)
 * Adding more complex schedules schemes (like cron format)
