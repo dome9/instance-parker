@@ -83,6 +83,7 @@ This is the IAM execution policy for your new role:
         "Sid": "d9Parker",
         "Effect": "Allow",
         "Action": [
+            "ec2:DescribeRegions",
             "ec2:DescribeInstances",
             "ec2:StopInstances",
             "ec2:StartInstances"
