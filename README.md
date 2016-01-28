@@ -11,7 +11,7 @@ A scheduled AWS Lambda script that automatically stops and starts AWS instances 
 
 *Why*
 
-Dev / Test environments are mostly operated only during working hours, so there is a large cost saving opportunity for turning stopping them at nights / weekends (could reduce 20%-30% from your EC2 spend)
+Dev / Test environments are mostly operated during working hours, so there is a significant cost saving opportunity for stopping them at nights / weekends (could reduce 20%-30% from your EC2 spend)
 
 *How*
 
